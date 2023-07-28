@@ -21,6 +21,8 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	GamersService_CreateGamer_FullMethodName     = "/gamerspb.GamersService/CreateGamer"
 	GamersService_DisapproveGamer_FullMethodName = "/gamerspb.GamersService/DisapproveGamer"
+	GamersService_GetGamer_FullMethodName        = "/gamerspb.GamersService/GetGamer"
+	GamersService_GetGamers_FullMethodName       = "/gamerspb.GamersService/GetGamers"
 )
 
 // GamersServiceClient is the client API for GamersService service.
@@ -29,6 +31,8 @@ const (
 type GamersServiceClient interface {
 	CreateGamer(ctx context.Context, in *CreateGamerRequest, opts ...grpc.CallOption) (*CreateGamerResponse, error)
 	DisapproveGamer(ctx context.Context, in *DisapproveGamerRequest, opts ...grpc.CallOption) (*DisapproveGamerResponse, error)
+	GetGamer(ctx context.Context, in *GetGamerRequest, opts ...grpc.CallOption) (*GetGamerResponse, error)
+	GetGamers(ctx context.Context, in *GetGamersRequest, opts ...grpc.CallOption) (*GetGamersResponse, error)
 }
 
 type gamersServiceClient struct {
@@ -57,12 +61,32 @@ func (c *gamersServiceClient) DisapproveGamer(ctx context.Context, in *Disapprov
 	return out, nil
 }
 
+func (c *gamersServiceClient) GetGamer(ctx context.Context, in *GetGamerRequest, opts ...grpc.CallOption) (*GetGamerResponse, error) {
+	out := new(GetGamerResponse)
+	err := c.cc.Invoke(ctx, GamersService_GetGamer_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *gamersServiceClient) GetGamers(ctx context.Context, in *GetGamersRequest, opts ...grpc.CallOption) (*GetGamersResponse, error) {
+	out := new(GetGamersResponse)
+	err := c.cc.Invoke(ctx, GamersService_GetGamers_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GamersServiceServer is the server API for GamersService service.
 // All implementations must embed UnimplementedGamersServiceServer
 // for forward compatibility
 type GamersServiceServer interface {
 	CreateGamer(context.Context, *CreateGamerRequest) (*CreateGamerResponse, error)
 	DisapproveGamer(context.Context, *DisapproveGamerRequest) (*DisapproveGamerResponse, error)
+	GetGamer(context.Context, *GetGamerRequest) (*GetGamerResponse, error)
+	GetGamers(context.Context, *GetGamersRequest) (*GetGamersResponse, error)
 	mustEmbedUnimplementedGamersServiceServer()
 }
 
@@ -75,6 +99,12 @@ func (UnimplementedGamersServiceServer) CreateGamer(context.Context, *CreateGame
 }
 func (UnimplementedGamersServiceServer) DisapproveGamer(context.Context, *DisapproveGamerRequest) (*DisapproveGamerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DisapproveGamer not implemented")
+}
+func (UnimplementedGamersServiceServer) GetGamer(context.Context, *GetGamerRequest) (*GetGamerResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGamer not implemented")
+}
+func (UnimplementedGamersServiceServer) GetGamers(context.Context, *GetGamersRequest) (*GetGamersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGamers not implemented")
 }
 func (UnimplementedGamersServiceServer) mustEmbedUnimplementedGamersServiceServer() {}
 
@@ -125,6 +155,42 @@ func _GamersService_DisapproveGamer_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GamersService_GetGamer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetGamerRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GamersServiceServer).GetGamer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GamersService_GetGamer_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GamersServiceServer).GetGamer(ctx, req.(*GetGamerRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _GamersService_GetGamers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetGamersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GamersServiceServer).GetGamers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GamersService_GetGamers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GamersServiceServer).GetGamers(ctx, req.(*GetGamersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GamersService_ServiceDesc is the grpc.ServiceDesc for GamersService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -139,6 +205,14 @@ var GamersService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DisapproveGamer",
 			Handler:    _GamersService_DisapproveGamer_Handler,
+		},
+		{
+			MethodName: "GetGamer",
+			Handler:    _GamersService_GetGamer_Handler,
+		},
+		{
+			MethodName: "GetGamers",
+			Handler:    _GamersService_GetGamers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

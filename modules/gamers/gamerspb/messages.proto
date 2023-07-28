@@ -7,6 +7,5 @@ message Gamer {
   string first_name = 2;
   string last_name = 3;
   string email = 4;
-  string password = 5;
-  bool is_approved = 6;
+  bool is_approved = 5;
 }

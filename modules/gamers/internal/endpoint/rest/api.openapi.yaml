@@ -19,3 +19,15 @@ openapiOptions:
         tags:
           - Gamer
         summary: Disapprove gamer
+    - method: gamerspb.GamersService.GetGamer
+      option:
+        operationId: getGamer
+        tags:
+          - Gamer
+        summary: Get gamer
+    - method: gamerspb.GamersService.GetGamers
+      option:
+        operationId: getGamers
+        tags:
+          - Gamer
+        summary: Get gamers

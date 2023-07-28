@@ -4,6 +4,8 @@ import (
 	"context"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/gamers/internal/application"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/gamers/internal/application/commands"
+	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/gamers/internal/application/queries"
+	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/gamers/internal/domain"
 	"github.com/rs/zerolog"
 )
 
@@ -31,4 +33,16 @@ func (a Application) DisapproveGamer(ctx context.Context, cmd commands.Disapprov
 	a.logger.Info().Msg("--> Gamers.DisapproveGamer")
 	defer func() { a.logger.Info().Err(err).Msg("<-- Gamers.DisapproveGamer") }()
 	return a.App.DisapproveGamer(ctx, cmd)
+}
+
+func (a Application) GetGamer(ctx context.Context, query queries.GetGamer) (_ *domain.GamerDTO, err error) {
+	a.logger.Info().Msg("--> Gamers.GetGamer")
+	defer func() { a.logger.Info().Err(err).Msg("<-- Gamers.GetGamer") }()
+	return a.App.GetGamer(ctx, query)
+}
+
+func (a Application) GetGamers(ctx context.Context, query queries.GetGamers) (_ []*domain.GamerDTO, err error) {
+	a.logger.Info().Msg("--> Gamers.GetGamers")
+	defer func() { a.logger.Info().Err(err).Msg("<-- Gamers.GetGamers") }()
+	return a.App.GetGamers(ctx, query)
 }

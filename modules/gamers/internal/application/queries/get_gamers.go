@@ -15,6 +15,6 @@ func NewGetGamersHandler(repo domain.GamerRepository) GetGamersHandler {
 	return GetGamersHandler{repo: repo}
 }
 
-func (h GetGamersHandler) GetGamers(ctx context.Context, query GetGamers) ([]*domain.GamerModel, error) {
+func (h GetGamersHandler) GetGamers(ctx context.Context, query GetGamers) ([]*domain.GamerDTO, error) {
 	return h.repo.FindGamers(ctx)
 }

@@ -7,3 +7,7 @@ http:
       body: "*"
     - selector: gamerspb.GamersService.DisapproveGamer
       get: /api/gamers/{id}/disapprove
+    - selector: gamerspb.GamersService.GetGamer
+      get: /api/gamers/{id}
+    - selector: gamerspb.GamersService.GetGamers
+      get: /api/gamers

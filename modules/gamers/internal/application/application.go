@@ -18,8 +18,8 @@ type Commands interface {
 }
 
 type Queries interface {
-	GetGamer(ctx context.Context, query queries.GetGamer) (*domain.GamerModel, error)
-	GetGamers(ctx context.Context, query queries.GetGamers) ([]*domain.GamerModel, error)
+	GetGamer(ctx context.Context, query queries.GetGamer) (*domain.GamerDTO, error)
+	GetGamers(ctx context.Context, query queries.GetGamers) ([]*domain.GamerDTO, error)
 }
 
 type Application struct {

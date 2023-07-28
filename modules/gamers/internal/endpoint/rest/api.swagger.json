@@ -18,6 +18,27 @@
   ],
   "paths": {
     "/api/gamers": {
+      "get": {
+        "summary": "Get gamers",
+        "operationId": "getGamers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/gamerspbGetGamersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Gamer"
+        ]
+      },
       "post": {
         "summary": "Create a new gamer",
         "operationId": "createGamer",
@@ -43,6 +64,37 @@
             "schema": {
               "$ref": "#/definitions/gamerspbCreateGamerRequest"
             }
+          }
+        ],
+        "tags": [
+          "Gamer"
+        ]
+      }
+    },
+    "/api/gamers/{id}": {
+      "get": {
+        "summary": "Get gamer",
+        "operationId": "getGamer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/gamerspbGetGamerResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "tags": [
@@ -113,6 +165,46 @@
       "properties": {
         "id": {
           "type": "string"
+        }
+      }
+    },
+    "gamerspbGamer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "isApproved": {
+          "type": "boolean"
+        }
+      }
+    },
+    "gamerspbGetGamerResponse": {
+      "type": "object",
+      "properties": {
+        "gamer": {
+          "$ref": "#/definitions/gamerspbGamer"
+        }
+      }
+    },
+    "gamerspbGetGamersResponse": {
+      "type": "object",
+      "properties": {
+        "gamers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/gamerspbGamer"
+          }
         }
       }
     },

@@ -7,6 +7,8 @@ import "gamerspb/messages.proto";
 service GamersService {
   rpc CreateGamer(CreateGamerRequest) returns (CreateGamerResponse){};
   rpc DisapproveGamer(DisapproveGamerRequest) returns (DisapproveGamerResponse){};
+  rpc GetGamer(GetGamerRequest) returns (GetGamerResponse){};
+  rpc GetGamers(GetGamersRequest) returns (GetGamersResponse){};
 }
 
 message CreateGamerRequest {
@@ -26,4 +28,18 @@ message DisapproveGamerRequest {
 
 message DisapproveGamerResponse {
   string id = 1;
+}
+
+message GetGamerRequest {
+  string id = 1;
+}
+
+message GetGamerResponse {
+  Gamer gamer = 1;
+}
+
+message GetGamersRequest {}
+
+message GetGamersResponse {
+  repeated Gamer gamers = 1;
 }
