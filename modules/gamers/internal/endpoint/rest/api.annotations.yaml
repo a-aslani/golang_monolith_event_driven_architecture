@@ -1,0 +1,9 @@
+type: google.api.Service
+config_version: 3
+http:
+  rules:
+    - selector: gamerspb.GamersService.CreateGamer
+      post: /api/gamers
+      body: "*"
+    - selector: gamerspb.GamersService.DisapproveGamer
+      get: /api/gamers/{id}/disapprove

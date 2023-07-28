@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package gamerspb;
+
+message Gamer {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string email = 4;
+  string password = 5;
+  bool is_approved = 6;
+}

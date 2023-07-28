@@ -1,0 +1,35 @@
+version: "3.7"
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  postgres_db:
+
+services:
+  postgres:
+    image: postgres:15.3-alpine
+    container_name: postgres
+    networks:
+      - app_network
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: "secret"
+
+  pgadmin4:
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=db@app.com
+      - PGADMIN_DEFAULT_PASSWORD=secret
+    ports:
+      - "4053:80"
+    restart: always
+    networks:
+      - app_network

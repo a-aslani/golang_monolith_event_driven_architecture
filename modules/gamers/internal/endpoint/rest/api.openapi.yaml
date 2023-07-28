@@ -1,0 +1,21 @@
+openapiOptions:
+  file:
+    - file: "gamerspb/messages.proto"
+      option:
+        info:
+          title: Gamer
+          version: "1.0.0"
+        basePath: /
+  method:
+    - method: gamerspb.GamersService.CreateGamer
+      option:
+        operationId: createGamer
+        tags:
+          - Gamer
+        summary: Create a new gamer
+    - method: gamerspb.GamersService.DisapproveGamer
+      option:
+        operationId: disapproveGamer
+        tags:
+          - Gamer
+        summary: Disapprove gamer
