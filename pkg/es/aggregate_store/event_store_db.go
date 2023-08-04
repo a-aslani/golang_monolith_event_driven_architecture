@@ -2,6 +2,7 @@ package aggregate_store
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/esdb"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/ddd"
@@ -32,7 +33,7 @@ type aggregateEvent struct {
 	aggregateType ddd.AggregateType
 	aggregateID   string
 	version       int64
-	metadata      []byte
+	metadata      ddd.Metadata
 	aggregate     es.EventSourcedAggregate
 	payload       ddd.EventPayload
 }
@@ -55,6 +56,10 @@ func (e EventStoreDB) NewEventFromRecorded(event *esdb.RecordedEvent) (aggregate
 		return aggregateEvent{}, err
 	}
 
+	var metadata ddd.Metadata
+
+	err = json.Unmarshal(event.UserMetadata, &metadata)
+
 	return aggregateEvent{
 		eventID:     event.EventID.String(),
 		eventType:   event.EventType,
@@ -62,7 +67,7 @@ func (e EventStoreDB) NewEventFromRecorded(event *esdb.RecordedEvent) (aggregate
 		timestamp:   event.CreatedDate,
 		aggregateID: event.StreamID,
 		version:     int64(event.EventNumber),
-		metadata:    event.UserMetadata,
+		metadata:    metadata,
 		payload:     payload,
 		name:        event.EventType,
 	}, nil
@@ -106,9 +111,14 @@ func (e EventStoreDB) Save(ctx context.Context, aggregate es.EventSourcedAggrega
 	eventsData := make([]esdb.EventData, 0, len(aggregate.Events()))
 	for _, event := range aggregate.Events() {
 
-		var dataBytes []byte
+		var data []byte
 
-		dataBytes, err := e.registry.Serialize(event.EventName(), event.Data())
+		data, err := e.registry.Serialize(event.EventName(), event.Data())
+		if err != nil {
+			return err
+		}
+
+		metadata, err := json.Marshal(event.Metadata())
 		if err != nil {
 			return err
 		}
@@ -116,8 +126,8 @@ func (e EventStoreDB) Save(ctx context.Context, aggregate es.EventSourcedAggrega
 		eventsData = append(eventsData, esdb.EventData{
 			EventType:   event.EventType(),
 			ContentType: esdb.JsonContentType,
-			Data:        dataBytes,
-			Metadata:    event.Metadata(),
+			Data:        data,
+			Metadata:    metadata,
 		})
 	}
 
@@ -201,7 +211,7 @@ func (e aggregateEvent) AggregateID() string {
 	return e.aggregateID
 }
 
-func (e aggregateEvent) Metadata() []byte {
+func (e aggregateEvent) Metadata() ddd.Metadata {
 	return e.metadata
 }
 

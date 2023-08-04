@@ -1,8 +1,11 @@
 package ddd
 
-import "encoding/json"
+const (
+	AggregateNameKey    = "aggregate-name"
+	AggregateIDKey      = "aggregate-id"
+	AggregateVersionKey = "aggregate-version"
+)
 
-// AggregateType type of the Aggregate
 type AggregateType string
 
 type (
@@ -53,9 +56,8 @@ func (a *Aggregate) AddEvent(name string, data interface{}, options ...EventOpti
 	options = append(
 		options,
 		Metadata{
-			AggregateName: a.name,
-			AggregateID:   a.id,
-			//AggregateVersion: version,
+			AggregateNameKey: a.name,
+			AggregateIDKey:   a.id,
 		},
 	)
 	a.events = append(
@@ -68,18 +70,6 @@ func (a *Aggregate) AddEvent(name string, data interface{}, options ...EventOpti
 
 func (a *Aggregate) setEvents(events []AggregateEvent) { a.events = events }
 
-func (e aggregateEvent) AggregateName() string {
-	var metadata Metadata
-	_ = json.Unmarshal(e.metadata, &metadata)
-	return metadata.AggregateName
-}
-func (e aggregateEvent) AggregateID() string {
-	var metadata Metadata
-	_ = json.Unmarshal(e.metadata, &metadata)
-	return metadata.AggregateID
-}
-func (e aggregateEvent) AggregateVersion() int64 {
-	var metadata Metadata
-	_ = json.Unmarshal(e.metadata, &metadata)
-	return metadata.AggregateVersion
-}
+func (e aggregateEvent) AggregateName() string   { return e.metadata.Get(AggregateNameKey).(string) }
+func (e aggregateEvent) AggregateID() string     { return e.metadata.Get(AggregateIDKey).(string) }
+func (e aggregateEvent) AggregateVersion() int64 { return e.metadata.Get(AggregateVersionKey).(int64) }

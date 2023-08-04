@@ -2,24 +2,26 @@ package gamers
 
 import (
 	"context"
+	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/gamers/gamerspb"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/gamers/internal/application"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/gamers/internal/domain"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/gamers/internal/endpoint/grpc"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/gamers/internal/endpoint/rest"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/gamers/internal/handlers"
-	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/gamers/internal/infrastructure/logging"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/gamers/internal/infrastructure/postgres"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/gamers/internal/infrastructure/utils"
+	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/gamers/internal/logging"
+	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/am"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/ddd"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/es"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/es/aggregate_store"
+	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/jetstream"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/monolith"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/registry"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/registry/serdes"
 )
 
-type Module struct {
-}
+type Module struct{}
 
 func (m Module) Startup(ctx context.Context, mono monolith.Monolith) error {
 
@@ -29,6 +31,10 @@ func (m Module) Startup(ctx context.Context, mono monolith.Monolith) error {
 	if err != nil {
 		return err
 	}
+	if err = gamerspb.Registrations(reg); err != nil {
+		return err
+	}
+	eventStream := am.NewEventStream(reg, jetstream.NewStream(mono.Config().Nats.Stream, mono.JS()))
 	domainDispatcher := ddd.NewEventDispatcher[ddd.AggregateEvent]()
 	aggregateGamer := es.AggregateStoreWithMiddleware(
 		aggregate_store.NewEventStoreDB(mono.ESDB(), reg),
@@ -49,6 +55,11 @@ func (m Module) Startup(ctx context.Context, mono monolith.Monolith) error {
 		"Gamer", mono.Logger(),
 	)
 
+	integrationEventHandlers := logging.LogEventHandlerAccess[ddd.AggregateEvent](
+		application.NewIntegrationEventHandlers(eventStream),
+		"IntegrationEvents", mono.Logger(),
+	)
+
 	// setup Driver adapters
 	if err := grpc.RegisterServer(ctx, app, mono.RPC()); err != nil {
 		return err
@@ -60,6 +71,7 @@ func (m Module) Startup(ctx context.Context, mono monolith.Monolith) error {
 		return err
 	}
 	handlers.RegisterGamerHandlers(gamerHandlers, domainDispatcher)
+	handlers.RegisterIntegrationEventHandlers(integrationEventHandlers, domainDispatcher)
 
 	return nil
 }

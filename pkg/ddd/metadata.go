@@ -1,21 +1,21 @@
 package ddd
 
-import "encoding/json"
+type Metadata map[string]any
 
-type Metadata struct {
-	AggregateName    string `json:"aggregate_name"`
-	AggregateID      string `json:"aggregate_id"`
-	AggregateVersion int64  `json:"aggregate_version"`
+func (m Metadata) Set(key string, value any) {
+	m[key] = value
 }
 
-func (m Metadata) configureEvent(e *event) error {
+func (m Metadata) Get(key string) any {
+	return m[key]
+}
 
-	metadataBytes, err := json.Marshal(m)
-	if err != nil {
-		return err
+func (m Metadata) Del(key string) {
+	delete(m, key)
+}
+
+func (m Metadata) configureEvent(e *event) {
+	for key, value := range m {
+		e.metadata[key] = value
 	}
-
-	e.metadata = metadataBytes
-
-	return nil
 }

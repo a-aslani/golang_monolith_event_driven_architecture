@@ -32,7 +32,7 @@ func (a *Aggregate) AddEvent(name string, data interface{}, options ...ddd.Event
 	options = append(
 		options,
 		ddd.Metadata{
-			AggregateVersion: a.PendingVersion() + 1,
+			ddd.AggregateVersionKey: a.PendingVersion() + 1,
 		},
 	)
 

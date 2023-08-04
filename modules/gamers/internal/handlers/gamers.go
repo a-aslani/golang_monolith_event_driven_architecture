@@ -6,7 +6,9 @@ import (
 )
 
 func RegisterGamerHandlers(handlers ddd.EventHandler[ddd.AggregateEvent], domainSubscriber ddd.EventSubscriber[ddd.AggregateEvent]) {
-	domainSubscriber.Subscribe(domain.GamerCreatedEvent, handlers)
-	domainSubscriber.Subscribe(domain.GamerApprovedEvent, handlers)
-	domainSubscriber.Subscribe(domain.GamerDisapprovedEvent, handlers)
+	domainSubscriber.Subscribe(handlers,
+		domain.GamerCreatedEvent,
+		domain.GamerApprovedEvent,
+		domain.GamerDisapprovedEvent,
+	)
 }

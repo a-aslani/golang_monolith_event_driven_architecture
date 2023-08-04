@@ -6,7 +6,7 @@ import (
 	"github.com/EventStore/EventStore-Client-Go/esdb"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/config"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/gamers"
-	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/event_strore_db"
+	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/notifications"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/logger"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/monolith"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/rpc"
@@ -14,6 +14,8 @@ import (
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/web"
 	"github.com/go-chi/chi/v5"
 	_ "github.com/jackc/pgx/v4/stdlib"
+	"github.com/nats-io/nats.go"
+	"github.com/rs/zerolog"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"net/http"
@@ -38,7 +40,9 @@ func run() (err error) {
 	m := app{cfg: cfg}
 
 	// init infrastructure...
-	m.esdb, err = event_strore_db.NewEventStoreDB(cfg.ESDB.Conn)
+
+	// init EventStore db
+	m.esdb, err = initEventStoreDB(cfg.ESDB.Conn)
 	if err != nil {
 		return err
 	}
@@ -49,6 +53,7 @@ func run() (err error) {
 		}
 	}(m.esdb)
 
+	// connect to the Postgres
 	m.db, err = sql.Open("pgx", cfg.PG.Conn)
 	if err != nil {
 		return err
@@ -59,10 +64,19 @@ func run() (err error) {
 			return
 		}
 	}(m.db)
-	m.logger = logger.New(logger.LogConfig{
-		Environment: cfg.Environment,
-		LogLevel:    logger.Level(cfg.LogLevel),
-	})
+
+	// init nats & JetStream
+	m.nc, err = nats.Connect(cfg.Nats.URL)
+	if err != nil {
+		return err
+	}
+	defer m.nc.Close()
+	m.js, err = initJetStream(cfg.Nats, m.nc)
+	if err != nil {
+		return err
+	}
+
+	m.logger = initLogger(cfg)
 	m.rpc = initRpc(cfg.Rpc)
 	m.mux = initMux(cfg.Web)
 	m.waiter = waiter.New(waiter.CatchSignals())
@@ -70,6 +84,7 @@ func run() (err error) {
 	// init modules
 	m.modules = []monolith.Module{
 		&gamers.Module{},
+		&notifications.Module{},
 	}
 
 	if err = m.startupModules(); err != nil {
@@ -90,6 +105,13 @@ func run() (err error) {
 	return m.waiter.Wait()
 }
 
+func initLogger(cfg config.AppConfig) zerolog.Logger {
+	return logger.New(logger.LogConfig{
+		Environment: cfg.Environment,
+		LogLevel:    logger.Level(cfg.LogLevel),
+	})
+}
+
 func initRpc(_ rpc.RpcConfig) *grpc.Server {
 	server := grpc.NewServer()
 	reflection.Register(server)
@@ -99,4 +121,26 @@ func initRpc(_ rpc.RpcConfig) *grpc.Server {
 
 func initMux(_ web.WebConfig) *chi.Mux {
 	return chi.NewMux()
+}
+
+func initJetStream(cfg config.NatsConfig, nc *nats.Conn) (nats.JetStreamContext, error) {
+	js, err := nc.JetStream()
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = js.AddStream(&nats.StreamConfig{
+		Name:     cfg.Stream,
+		Subjects: []string{fmt.Sprintf("%s.>", cfg.Stream)},
+	})
+
+	return js, err
+}
+
+func initEventStoreDB(connectionString string) (*esdb.Client, error) {
+	settings, err := esdb.ParseConnectionString(connectionString)
+	if err != nil {
+		return nil, err
+	}
+	return esdb.NewClient(settings)
 }

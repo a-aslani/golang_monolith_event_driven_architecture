@@ -16,6 +16,10 @@ generate:
 up: ## run the application on docker
 	@docker-compose up --build -d
 
+.PHONY: down
+down: ## stop the application on docker
+	@docker-compose down
+
 .PHONY: db
 db: ## create the database
 	@docker exec -it postgres createdb --username=root --owner=root event_driven

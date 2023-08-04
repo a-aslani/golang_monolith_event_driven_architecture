@@ -14,7 +14,7 @@ func NewUtils() Utils {
 }
 
 func (u Utils) Hash(str string) (string, error) {
-	strByte := []byte("MyDarkSecret")
+	strByte := []byte(str)
 	hashed, err := bcrypt.GenerateFromPassword(strByte, bcrypt.DefaultCost)
 	return string(hashed), err
 }
