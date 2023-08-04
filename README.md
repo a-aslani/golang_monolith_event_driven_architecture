@@ -2,6 +2,7 @@
 
 
 # Event-Driven Architecture in Golang
+Event-driven architecture (EDA) is a software architecture paradigm promoting the production, detection, consumption of, and reaction to events.
 
 ### Full list what has been used:
 [EventStoreDB](https://www.eventstore.com) The database built for Event Sourcing<br/>
