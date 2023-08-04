@@ -9,7 +9,7 @@
 [PostgreSQL](https://www.postgresql.org) Application Database<br/>
 [gRPC-Gateway](https://github.com/grpc-ecosystem/grpc-gateway) gRPC to JSON proxy generator following the gRPC HTTP spec<br/>
 [chi](https://github.com/go-chi/chi) A lightweight, idiomatic and composable router for building Go HTTP services<br/>
-[NATS JetStream](github.com/nats-io/nats.go) Connective Technology for Adaptive Edge & Distributed Systems<br/>
+[NATS JetStream](https://github.com/nats-io/nats.go) Connective Technology for Adaptive Edge & Distributed Systems<br/>
 [migrate](https://github.com/golang-migrate/migrate) Database migrations<br/>
 
 
