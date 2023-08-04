@@ -6,9 +6,10 @@
 #### 👨‍💻 Full list what has been used:
 [EventStoreDB](https://www.eventstore.com) The database built for Event Sourcing<br/>
 [gRPC](https://github.com/grpc/grpc-go) Go implementation of gRPC<br/>
-[PostgreSQL](https://www.postgresql.org) Application database<br/>
+[PostgreSQL](https://www.postgresql.org) Application Database<br/>
 [gRPC-Gateway](https://github.com/grpc-ecosystem/grpc-gateway) gRPC to JSON proxy generator following the gRPC HTTP spec<br/>
 [Chi](https://github.com/go-chi/chi) A lightweight, idiomatic and composable router for building Go HTTP services<br/>
+[NATS JetStream](github.com/nats-io/nats.go) Connective Technology for Adaptive Edge & Distributed Systems<br/>
 
 
 ## Build and run with Docker compose
