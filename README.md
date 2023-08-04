@@ -3,7 +3,7 @@
 
 # Event-Driven Architecture in Golang
 
-#### 👨‍💻 Full list what has been used:
+### Full list what has been used:
 [EventStoreDB](https://www.eventstore.com) The database built for Event Sourcing<br/>
 [gRPC](https://github.com/grpc/grpc-go) Go implementation of gRPC<br/>
 [PostgreSQL](https://github.com/jackc/pgx) Application Database<br/>
@@ -13,7 +13,7 @@
 [migrate](https://github.com/golang-migrate/migrate) Database migrations<br/>
 
 
-## Build and run with Docker compose
+### Build and run with Docker compose
 1. `make up`
 2. `make db`
 3. `make migrate`
