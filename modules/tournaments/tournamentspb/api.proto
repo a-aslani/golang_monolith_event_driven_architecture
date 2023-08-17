@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package tournamentspb;
+
+import "tournamentspb/messages.proto";
+
+service TournamentsService {
+  rpc CreateTournament(CreateTournamentRequest) returns (CreateTournamentResponse) {};
+}
+
+message CreateTournamentRequest {
+  string name = 1;
+  string description = 2;
+  string gamer_1_id = 3;
+  string gamer_2_id = 4;
+}
+
+message CreateTournamentResponse {
+  string id = 1;
+}

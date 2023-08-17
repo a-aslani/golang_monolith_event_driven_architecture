@@ -7,6 +7,7 @@ import (
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/config"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/gamers"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/notifications"
+	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/tournaments"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/logger"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/monolith"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/rpc"
@@ -85,6 +86,7 @@ func run() (err error) {
 	m.modules = []monolith.Module{
 		&gamers.Module{},
 		&notifications.Module{},
+		&tournaments.Module{},
 	}
 
 	if err = m.startupModules(); err != nil {

@@ -1,0 +1,15 @@
+openapiOptions:
+  file:
+    - file: "tournamentspb/messages.proto"
+      option:
+        info:
+          title: Tournament
+          version: "1.0.0"
+        basePath: /
+  method:
+    - method: tournamentspb.TournamentsService.CreateTournament
+      option:
+        operationId: createTournament
+        tags:
+          - Tournament
+        summary: Create a new tournament

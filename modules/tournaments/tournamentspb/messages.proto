@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package tournamentspb;
+
+import "google/protobuf/timestamp.proto";
+
+message Gamer {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string email = 4;
+  bool is_approved = 5;
+}
+
+message Tournament {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  Gamer gamer_1 = 4;
+  Gamer gamer_2 = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp finished_at = 7;
+}

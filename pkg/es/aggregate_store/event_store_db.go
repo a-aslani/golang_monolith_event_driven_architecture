@@ -3,11 +3,11 @@ package aggregate_store
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/EventStore/EventStore-Client-Go/esdb"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/ddd"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/es"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/registry"
+	"github.com/rs/zerolog"
 	"github.com/stackus/errors"
 	"io"
 	"math"
@@ -21,6 +21,7 @@ const (
 type EventStoreDB struct {
 	registry registry.Registry
 	db       *esdb.Client
+	logger   zerolog.Logger
 }
 
 type aggregateEvent struct {
@@ -41,10 +42,11 @@ type aggregateEvent struct {
 var _ es.AggregateStore = (*EventStoreDB)(nil)
 var _ ddd.AggregateEvent = (*aggregateEvent)(nil)
 
-func NewEventStoreDB(db *esdb.Client, registry registry.Registry) EventStoreDB {
+func NewEventStoreDB(db *esdb.Client, registry registry.Registry, logger zerolog.Logger) EventStoreDB {
 	return EventStoreDB{
 		registry: registry,
 		db:       db,
+		logger:   logger,
 	}
 }
 
@@ -145,7 +147,7 @@ func (e EventStoreDB) Save(ctx context.Context, aggregate es.EventSourcedAggrega
 			return errors.Wrap(err, "db.AppendToStream")
 		}
 
-		fmt.Printf("(Save) stream: {%+v}\n", appendStream)
+		e.logger.Info().Msgf("(Save) stream: {%+v}", appendStream)
 		return nil
 	}
 
@@ -162,7 +164,7 @@ func (e EventStoreDB) Save(ctx context.Context, aggregate es.EventSourcedAggrega
 	}
 
 	expectedRevision = esdb.Revision(lastEvent.OriginalEvent().EventNumber)
-	//fmt.Printf("(Save) expectedRevision: {%T}", expectedRevision)
+	e.logger.Info().Msgf("(Save) expectedRevision: {%T}", expectedRevision)
 
 	appendStream, err := e.db.AppendToStream(
 		ctx,
@@ -174,7 +176,7 @@ func (e EventStoreDB) Save(ctx context.Context, aggregate es.EventSourcedAggrega
 		return errors.Wrap(err, "db.AppendToStream")
 	}
 
-	fmt.Printf("(Save) stream: {%+v}\n", appendStream)
+	e.logger.Info().Msgf("(Save) stream: {%+v}", appendStream)
 	//aggregate.ClearUncommittedEvents()
 	return nil
 }

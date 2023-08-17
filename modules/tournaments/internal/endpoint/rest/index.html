@@ -36,10 +36,7 @@
 	window.onload = function () {
 		// Begin Swagger UI call region
 		const ui = SwaggerUIBundle({
-			urls: [
-				{name: "Gamers", url: "gamers-spec/api.swagger.json"},
-				{name: "Tournaments", url: "tournaments-spec/api.swagger.json"},
-			],
+			url: "api.swagger.json",
 			dom_id: '#swagger-ui',
 			deepLinking: true,
 			presets: [

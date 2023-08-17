@@ -25,10 +25,10 @@ func (m Module) Startup(ctx context.Context, mono monolith.Monolith) error {
 	eventStream := am.NewEventStream(reg, jetstream.NewStream(mono.Config().Nats.Stream, mono.JS()))
 
 	// setup application
-
 	gamerHandlers := logging.LogEventHandlerAccess[ddd.Event](
 		application.NewGamerHandlers(mono.Logger()),
-		"Gamer", mono.Logger(),
+		"Gamer",
+		mono.Logger(),
 	)
 
 	// setup Driver adapters

@@ -1,0 +1,7 @@
+type: google.api.Service
+config_version: 3
+http:
+  rules:
+    - selector: tournamentspb.TournamentsService.CreateTournament
+      post: /api/tournaments
+      body: "*"

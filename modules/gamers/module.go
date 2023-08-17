@@ -37,7 +37,7 @@ func (m Module) Startup(ctx context.Context, mono monolith.Monolith) error {
 	eventStream := am.NewEventStream(reg, jetstream.NewStream(mono.Config().Nats.Stream, mono.JS()))
 	domainDispatcher := ddd.NewEventDispatcher[ddd.AggregateEvent]()
 	aggregateGamer := es.AggregateStoreWithMiddleware(
-		aggregate_store.NewEventStoreDB(mono.ESDB(), reg),
+		aggregate_store.NewEventStoreDB(mono.ESDB(), reg, mono.Logger()),
 		es.NewEventPublisher(domainDispatcher),
 		//pg.NewSnapshotStore("gamers.snapshots", mono.DB(), reg),
 	)
@@ -81,8 +81,8 @@ func registrations(reg registry.Registry) (err error) {
 
 	// Gamer
 	if err = serde.Register(domain.Gamer{}, func(v any) error {
-		store := v.(*domain.Gamer)
-		store.Aggregate = es.NewAggregate("", domain.GamerAggregate)
+		gamer := v.(*domain.Gamer)
+		gamer.Aggregate = es.NewAggregate("", domain.GamerAggregate)
 		return nil
 	}); err != nil {
 		return
