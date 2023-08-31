@@ -15,5 +15,5 @@ func RegisterGamerHandlers(gamerHandlers ddd.EventHandler[ddd.Event], stream am.
 
 	return stream.Subscribe(gamerspb.GamerAggregateChannel, evtMsgHandler, am.MessageFilter{
 		gamerspb.GamerCreatedEvent,
-	})
+	}, am.GroupName("notifications-gamers"))
 }

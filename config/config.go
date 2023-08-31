@@ -23,12 +23,17 @@ type (
 		Stream string `default:"app"`
 	}
 
+	AMQPConfig struct {
+		Conn string `required:"true"`
+	}
+
 	AppConfig struct {
 		Environment     string
 		LogLevel        string `envconfig:"LOG_LEVEL" default:"DEBUG"`
 		PG              PGConfig
 		ESDB            ESDBConfig
 		Nats            NatsConfig
+		AMQP            AMQPConfig
 		Rpc             rpc.RpcConfig
 		Web             web.WebConfig
 		ShutdownTimeout time.Duration `envconfig:"SHUTDOWN_TIMEOUT" default:"30s"`

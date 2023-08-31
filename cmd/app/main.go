@@ -16,12 +16,19 @@ import (
 	"github.com/go-chi/chi/v5"
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/nats-io/nats.go"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/rs/zerolog"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"net/http"
 	"os"
 )
+
+var modules = []monolith.Module{
+	&gamers.Module{},
+	&notifications.Module{},
+	&tournaments.Module{},
+}
 
 func main() {
 	if err := run(); err != nil {
@@ -77,17 +84,25 @@ func run() (err error) {
 		return err
 	}
 
+	// init rabbitmq
+	//m.ampq, err = amqp.Dial(cfg.AMQP.Conn)
+	//if err != nil {
+	//	return err
+	//}
+	//defer func(conn *amqp.Connection) {
+	//	err := conn.Close()
+	//	if err != nil {
+	//		return
+	//	}
+	//}(m.ampq)
+
 	m.logger = initLogger(cfg)
 	m.rpc = initRpc(cfg.Rpc)
 	m.mux = initMux(cfg.Web)
 	m.waiter = waiter.New(waiter.CatchSignals())
 
 	// init modules
-	m.modules = []monolith.Module{
-		&gamers.Module{},
-		&notifications.Module{},
-		&tournaments.Module{},
-	}
+	m.modules = modules
 
 	if err = m.startupModules(); err != nil {
 		return err
@@ -137,6 +152,15 @@ func initJetStream(cfg config.NatsConfig, nc *nats.Conn) (nats.JetStreamContext,
 	})
 
 	return js, err
+}
+
+func initRabbitMQ(cfg config.AMQPConfig, conn *amqp.Connection) (*amqp.Channel, error) {
+	ch, err := conn.Channel()
+	if err != nil {
+		return nil, err
+	}
+
+	return ch, nil
 }
 
 func initEventStoreDB(connectionString string) (*esdb.Client, error) {

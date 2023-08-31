@@ -9,6 +9,8 @@ volumes:
   js_data:
   event_store_data:
   event_store_logs:
+  rabbitmq_data:
+  rabbitmq_logs:
 
 services:
   postgres:
@@ -75,3 +77,19 @@ services:
       - /var/lib/nats/data
     volumes:
       - js_data:/var/lib/nats/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_VHOST=my_vhost
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - rabbitmq_logs:/var/log/rabbitmq
+    networks:
+      - app_network

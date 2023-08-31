@@ -10,6 +10,7 @@ import (
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/waiter"
 	"github.com/go-chi/chi/v5"
 	"github.com/nats-io/nats.go"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/rs/zerolog"
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc"
@@ -23,6 +24,7 @@ type app struct {
 	db      *sql.DB
 	esdb    *esdb.Client
 	nc      *nats.Conn
+	ampq    *amqp.Connection
 	js      nats.JetStreamContext
 	logger  zerolog.Logger
 	modules []monolith.Module
