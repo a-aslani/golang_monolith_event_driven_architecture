@@ -8,4 +8,5 @@ message Gamer {
   string last_name = 3;
   string email = 4;
   bool is_approved = 5;
+  int32 gem = 6;
 }

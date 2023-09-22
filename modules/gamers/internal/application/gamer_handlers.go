@@ -27,9 +27,18 @@ func (h GamerHandlers[T]) HandleEvent(ctx context.Context, event T) error {
 		return h.onGamerApproved(ctx, event)
 	case domain.GamerDisapprovedEvent:
 		return h.onGamerDisapproved(ctx, event)
+	case domain.GamerUpdatedGemEvent:
+		return h.onGamerUpdatedGem(ctx, event)
 	}
 
 	return nil
+}
+
+func (h GamerHandlers[T]) onGamerUpdatedGem(ctx context.Context, event ddd.AggregateEvent) error {
+
+	payload := event.Payload().(*domain.GamerUpdatedGem)
+
+	return h.repo.UpdateGamerGem(ctx, event.AggregateID(), payload.Amount.Value)
 }
 
 func (h GamerHandlers[T]) onGamerDisapproved(ctx context.Context, event ddd.AggregateEvent) error {
@@ -44,5 +53,5 @@ func (h GamerHandlers[T]) onGamerCreated(ctx context.Context, event ddd.Aggregat
 
 	payload := event.Payload().(*domain.GamerCreated)
 
-	return h.repo.CreateGamer(ctx, event.AggregateID(), payload.FirstName, payload.LastName, payload.Email, payload.Password, payload.IsApproved)
+	return h.repo.CreateGamer(ctx, event.AggregateID(), payload.FullName.FistName, payload.FullName.LastName, payload.Email.Value, payload.Password.Value, payload.IsApproved)
 }

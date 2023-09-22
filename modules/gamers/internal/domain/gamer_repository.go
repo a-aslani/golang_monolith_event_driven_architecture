@@ -7,6 +7,7 @@ type GamerRepository interface {
 	ChangeGamerState(ctx context.Context, id string, isApproved bool) error
 	FindGamer(ctx context.Context, id string) (*GamerDTO, error)
 	FindGamers(ctx context.Context) ([]*GamerDTO, error)
+	UpdateGamerGem(ctx context.Context, id string, amount int) error
 }
 
 type GamerDTO struct {

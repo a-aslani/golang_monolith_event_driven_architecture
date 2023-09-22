@@ -10,5 +10,6 @@ func RegisterGamerHandlers(handlers ddd.EventHandler[ddd.AggregateEvent], domain
 		domain.GamerCreatedEvent,
 		domain.GamerApprovedEvent,
 		domain.GamerDisapprovedEvent,
+		domain.GamerUpdatedGemEvent,
 	)
 }

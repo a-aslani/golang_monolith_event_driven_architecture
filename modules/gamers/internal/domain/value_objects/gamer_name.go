@@ -9,8 +9,8 @@ var (
 )
 
 type GamerName struct {
-	fistName string
-	lastName string
+	FistName string
+	LastName string
 }
 
 func NewGamerName(firstName, lastName string) (GamerName, error) {
@@ -20,15 +20,7 @@ func NewGamerName(firstName, lastName string) (GamerName, error) {
 	}
 
 	return GamerName{
-		fistName: firstName,
-		lastName: lastName,
+		FistName: firstName,
+		LastName: lastName,
 	}, nil
-}
-
-func (g GamerName) FistName() string {
-	return g.fistName
-}
-
-func (g GamerName) LastName() string {
-	return g.lastName
 }

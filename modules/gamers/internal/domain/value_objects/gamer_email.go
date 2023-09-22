@@ -11,7 +11,7 @@ var (
 )
 
 type GamerEmail struct {
-	value string
+	Value string
 }
 
 func NewGamerEmail(email string) (GamerEmail, error) {
@@ -25,12 +25,8 @@ func NewGamerEmail(email string) (GamerEmail, error) {
 	}
 
 	return GamerEmail{
-		value: email,
+		Value: email,
 	}, nil
-}
-
-func (g GamerEmail) Value() string {
-	return g.value
 }
 
 func isEmailValid(e string) bool {

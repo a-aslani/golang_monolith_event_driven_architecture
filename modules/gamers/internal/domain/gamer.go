@@ -15,6 +15,7 @@ type Gamer struct {
 	email      value_objects.GamerEmail
 	password   value_objects.GamerPassword
 	isApproved bool
+	gem        value_objects.GamerGem
 }
 
 var _ interface {
@@ -49,10 +50,9 @@ func CreateGamer(id, fistName, lastName, email, password string) (*Gamer, error)
 	gamer := NewGamer(id)
 
 	gamer.AddEvent(GamerCreatedEvent, &GamerCreated{
-		FirstName:  gamerName.FistName(),
-		LastName:   gamerName.LastName(),
-		Email:      gamerEmail.Value(),
-		Password:   gamerPassword.Value(),
+		FullName:   gamerName,
+		Email:      gamerEmail,
+		Password:   gamerPassword,
 		IsApproved: false,
 	})
 
@@ -65,15 +65,39 @@ func (a *Gamer) Disapprove() {
 	a.AddEvent(GamerDisapprovedEvent, &GamerDisapproved{})
 }
 
+func (a *Gamer) IncreaseGem(amount int) error {
+
+	gem, err := value_objects.NewGamerGem(a.gem.Value + amount)
+	if err != nil {
+		return err
+	}
+
+	a.AddEvent(GamerUpdatedGemEvent, &GamerUpdatedGem{Amount: gem})
+
+	return nil
+}
+
+func (a *Gamer) DecreaseGem(amount int) error {
+
+	gem, err := value_objects.NewGamerGem(a.gem.Value - amount)
+	if err != nil {
+		return err
+	}
+
+	a.AddEvent(GamerUpdatedGemEvent, &GamerUpdatedGem{Amount: gem})
+
+	return err
+}
+
 func (Gamer) Key() string { return GamerAggregate }
 
 func (a *Gamer) ApplyEvent(event ddd.Event) error {
 
 	switch payload := event.Payload().(type) {
 	case *GamerCreated:
-		a.name, _ = value_objects.NewGamerName(payload.FirstName, payload.LastName)
-		a.email, _ = value_objects.NewGamerEmail(payload.Email)
-		a.password, _ = value_objects.NewGamerPassword(payload.Password)
+		a.name = payload.FullName
+		a.email = payload.Email
+		a.password = payload.Password
 		a.isApproved = payload.IsApproved
 
 	case *GamerApproved:
@@ -81,6 +105,9 @@ func (a *Gamer) ApplyEvent(event ddd.Event) error {
 
 	case *GamerDisapproved:
 		a.isApproved = false
+
+	case *GamerUpdatedGem:
+		a.gem = payload.Amount
 
 	default:
 		return errors.ErrInternal.Msgf("%T received the event %s with unexpected payload %T", a, event.EventName(), payload)
@@ -97,6 +124,7 @@ func (a *Gamer) ApplySnapshot(snapshot es.Snapshot) error {
 		a.email = ss.Email
 		a.password = ss.Password
 		a.isApproved = ss.IsApproved
+		a.gem = ss.Gem
 	default:
 		return errors.ErrInternal.Msgf("%T received the unexpected snapshot %T", a, snapshot)
 	}
@@ -110,5 +138,6 @@ func (a *Gamer) ToSnapshot() es.Snapshot {
 		Email:      a.email,
 		Password:   a.password,
 		IsApproved: a.isApproved,
+		Gem:        a.gem,
 	}
 }

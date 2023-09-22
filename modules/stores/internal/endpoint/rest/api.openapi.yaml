@@ -1,0 +1,15 @@
+openapiOptions:
+  file:
+    - file: "storespb/messages.proto"
+      option:
+        info:
+          title: Store
+          version: "1.0.0"
+        basePath: /
+  method:
+    - method: storespb.StoresService.Test
+      option:
+        operationId: TestStore
+        tags:
+          - Store
+        summary: Test store

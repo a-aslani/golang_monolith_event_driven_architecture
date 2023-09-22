@@ -11,7 +11,7 @@ var (
 )
 
 type TournamentDescription struct {
-	value string
+	Value string
 }
 
 func NewTournamentDescription(description string) (TournamentDescription, error) {
@@ -25,10 +25,6 @@ func NewTournamentDescription(description string) (TournamentDescription, error)
 	}
 
 	return TournamentDescription{
-		value: description,
+		Value: description,
 	}, nil
-}
-
-func (receiver TournamentDescription) Value() string {
-	return receiver.value
 }

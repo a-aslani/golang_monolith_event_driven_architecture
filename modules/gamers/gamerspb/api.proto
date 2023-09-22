@@ -9,6 +9,26 @@ service GamersService {
   rpc DisapproveGamer(DisapproveGamerRequest) returns (DisapproveGamerResponse){};
   rpc GetGamer(GetGamerRequest) returns (GetGamerResponse){};
   rpc GetGamers(GetGamersRequest) returns (GetGamersResponse){};
+  rpc IncreaseGem(IncreaseGemRequest) returns (IncreaseGemResponse){};
+  rpc DecreaseGem(DecreaseGemRequest) returns (DecreaseGemResponse){};
+}
+
+message IncreaseGemRequest {
+  string id = 1;
+  int32 amount = 2;
+}
+
+message IncreaseGemResponse {
+  string id = 1;
+}
+
+message DecreaseGemRequest {
+  string id = 1;
+  int32 amount = 2;
+}
+
+message DecreaseGemResponse {
+  string id = 1;
 }
 
 message CreateGamerRequest {

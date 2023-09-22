@@ -23,6 +23,33 @@ func RegisterServer(_ context.Context, app application.App, registrar grpc.Servi
 	return nil
 }
 
+func (s server) DecreaseGem(ctx context.Context, req *gamerspb.DecreaseGemRequest) (*gamerspb.DecreaseGemResponse, error) {
+
+	err := s.app.DecreaseGem(ctx, commands.DecreaseGem{
+		ID:     req.GetId(),
+		Amount: int(req.GetAmount()),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &gamerspb.DecreaseGemResponse{Id: req.GetId()}, nil
+
+}
+
+func (s server) IncreaseGem(ctx context.Context, req *gamerspb.IncreaseGemRequest) (*gamerspb.IncreaseGemResponse, error) {
+
+	err := s.app.IncreaseGem(ctx, commands.IncreaseGem{
+		ID:     req.GetId(),
+		Amount: int(req.GetAmount()),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &gamerspb.IncreaseGemResponse{Id: req.GetId()}, nil
+}
+
 func (s server) DisapproveGamer(ctx context.Context, request *gamerspb.DisapproveGamerRequest) (*gamerspb.DisapproveGamerResponse, error) {
 
 	err := s.app.DisapproveGamer(

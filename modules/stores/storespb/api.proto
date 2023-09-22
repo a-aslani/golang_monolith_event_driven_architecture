@@ -1,0 +1,13 @@
+syntax="proto3";
+
+package storespb;
+
+import "storespb/messages.proto";
+
+service StoresService {
+  rpc Test(TestRequest) returns (TestResponse){};
+}
+
+message TestRequest {}
+
+message TestResponse {}

@@ -10,7 +10,7 @@ var (
 )
 
 type TournamentName struct {
-	value string
+	Value string
 }
 
 func NewTournamentName(name string) (TournamentName, error) {
@@ -20,10 +20,6 @@ func NewTournamentName(name string) (TournamentName, error) {
 	}
 
 	return TournamentName{
-		value: name,
+		Value: name,
 	}, nil
-}
-
-func (receiver TournamentName) Value() string {
-	return receiver.value
 }

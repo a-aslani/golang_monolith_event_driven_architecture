@@ -23,6 +23,18 @@ func LogApplicationAccess(application application.App, logger zerolog.Logger) Ap
 	}
 }
 
+func (a Application) DecreaseGem(ctx context.Context, cmd commands.DecreaseGem) (err error) {
+	a.logger.Info().Msg("--> Gamers.DecreaseGem")
+	defer func() { a.logger.Info().Err(err).Msg("<-- Gamers.DecreaseGem") }()
+	return a.App.DecreaseGem(ctx, cmd)
+}
+
+func (a Application) IncreaseGem(ctx context.Context, cmd commands.IncreaseGem) (err error) {
+	a.logger.Info().Msg("--> Gamers.IncreaseGem")
+	defer func() { a.logger.Info().Err(err).Msg("<-- Gamers.IncreaseGem") }()
+	return a.App.IncreaseGem(ctx, cmd)
+}
+
 func (a Application) CreateGamer(ctx context.Context, cmd commands.CreateGamer) (err error) {
 	a.logger.Info().Msg("--> Gamers.CreateGamer")
 	defer func() { a.logger.Info().Err(err).Msg("<-- Gamers.CreateGamers") }()

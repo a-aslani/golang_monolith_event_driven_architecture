@@ -17,6 +17,15 @@ func NewGamerRepository(db *sql.DB) GamerRepository {
 	return GamerRepository{db: db}
 }
 
+func (r GamerRepository) UpdateGamerGem(ctx context.Context, id string, amount int) error {
+
+	const query = `UPDATE gamers SET gem=$2 WHERE id=$1`
+
+	_, err := r.db.ExecContext(ctx, query, id, amount)
+
+	return err
+}
+
 func (r GamerRepository) ChangeGamerState(ctx context.Context, id string, isApproved bool) error {
 
 	const query = `UPDATE gamers SET is_approved=$2 WHERE id=$1`

@@ -9,6 +9,7 @@ type GamerV1 struct {
 	Email      value_objects.GamerEmail
 	Password   value_objects.GamerPassword
 	IsApproved bool
+	Gem        value_objects.GamerGem
 }
 
 func (g GamerV1) SnapshotName() string {

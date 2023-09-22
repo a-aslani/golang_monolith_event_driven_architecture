@@ -72,7 +72,7 @@ func (e EventStoreDB) NewEventFromRecorded(event *esdb.RecordedEvent) (aggregate
 		metadata:    metadata,
 		payload:     payload,
 		name:        event.EventType,
-	}, nil
+	}, err
 }
 
 func (e EventStoreDB) Load(ctx context.Context, aggregate es.EventSourcedAggregate) error {

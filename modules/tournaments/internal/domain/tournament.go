@@ -60,10 +60,10 @@ func CreateTournament(id, name, description, gamer1ID, gamer2ID string, createdA
 	tournament.createdAt = createdAt
 
 	tournament.AddEvent(TournamentCreatedEvent, &TournamentCreated{
-		Name:        tournament.name.Value(),
-		Description: tournament.description.Value(),
-		Gamer1ID:    tournament.gamer1ID.Value(),
-		Gamer2ID:    tournament.gamer2ID.Value(),
+		Name:        tournament.name,
+		Description: tournament.description,
+		Gamer1ID:    tournament.gamer1ID,
+		Gamer2ID:    tournament.gamer2ID,
 		CreatedAt:   tournament.createdAt,
 	})
 
@@ -74,40 +74,16 @@ func (a *Tournament) ApplyEvent(event ddd.Event) error {
 
 	switch payload := event.Payload().(type) {
 	case *TournamentCreated:
-		err := a.applyTournamentCreatedEvent(payload)
-		if err != nil {
-			return err
-		}
+
+		a.name = payload.Name
+		a.description = payload.Description
+		a.gamer1ID = payload.Gamer1ID
+		a.gamer2ID = payload.Gamer2ID
+		a.createdAt = payload.CreatedAt
+
 	default:
 		return errors.ErrInternal.Msgf("%T received the event %s with unexpected payload %T", a, event.EventName(), payload)
 	}
-
-	return nil
-}
-
-func (a *Tournament) applyTournamentCreatedEvent(payload *TournamentCreated) (err error) {
-
-	a.name, err = value_objects.NewTournamentName(payload.Name)
-	if err != nil {
-		return err
-	}
-
-	a.description, err = value_objects.NewTournamentDescription(payload.Description)
-	if err != nil {
-		return err
-	}
-
-	a.gamer1ID, err = value_objects.NewGamerID(payload.Gamer1ID)
-	if err != nil {
-		return err
-	}
-
-	a.gamer2ID, err = value_objects.NewGamerID(payload.Gamer2ID)
-	if err != nil {
-		return err
-	}
-
-	a.createdAt = payload.CreatedAt
 
 	return nil
 }
@@ -147,10 +123,10 @@ func (a *Tournament) ApplySnapshot(snapshot es.Snapshot) (err error) {
 
 func (a *Tournament) ToSnapshot() es.Snapshot {
 	return TournamentV1{
-		Name:        a.name.Value(),
-		Description: a.description.Value(),
-		Gamer1ID:    a.gamer1ID.Value(),
-		Gamer2ID:    a.gamer2ID.Value(),
+		Name:        a.name.Value,
+		Description: a.description.Value,
+		Gamer1ID:    a.gamer1ID.Value,
+		Gamer2ID:    a.gamer2ID.Value,
 		CreatedAt:   a.createdAt,
 	}
 }

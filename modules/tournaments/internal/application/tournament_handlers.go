@@ -32,5 +32,5 @@ func (h TournamentHandlers[T]) onTournamentCreated(ctx context.Context, event dd
 
 	payload := event.Payload().(*domain.TournamentCreated)
 
-	return h.repo.InsertTournament(ctx, event.AggregateID(), payload.Name, payload.Description, payload.Gamer1ID, payload.Gamer2ID, payload.CreatedAt)
+	return h.repo.InsertTournament(ctx, event.AggregateID(), payload.Name.Value, payload.Description.Value, payload.Gamer1ID.Value, payload.Gamer2ID.Value, payload.CreatedAt)
 }

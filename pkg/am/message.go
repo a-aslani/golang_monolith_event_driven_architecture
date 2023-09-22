@@ -15,11 +15,19 @@ type (
 		Kill() error
 	}
 
-	MessageHandler[O Message] interface {
-		HandleMessage(ctx context.Context, msg O) error
+	IncomingMessage interface {
+		Message
+		Ack() error
+		NAck() error
+		Extend() error
+		Kill() error
 	}
 
-	MessageHandlerFunc[O Message] func(ctx context.Context, msg O) error
+	MessageHandler[I Message] interface {
+		HandleMessage(ctx context.Context, msg I) error
+	}
+
+	MessageHandlerFunc[I Message] func(ctx context.Context, msg I) error
 
 	MessagePublisher[I any] interface {
 		Publish(ctx context.Context, topicName string, v I) error

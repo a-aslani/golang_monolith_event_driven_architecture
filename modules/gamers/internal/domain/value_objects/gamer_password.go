@@ -8,7 +8,7 @@ var (
 )
 
 type GamerPassword struct {
-	value string
+	Value string
 }
 
 func NewGamerPassword(password string) (GamerPassword, error) {
@@ -21,9 +21,5 @@ func NewGamerPassword(password string) (GamerPassword, error) {
 		return GamerPassword{}, ErrGamerPasswordIsMin6
 	}
 
-	return GamerPassword{value: password}, nil
-}
-
-func (g GamerPassword) Value() string {
-	return g.value
+	return GamerPassword{Value: password}, nil
 }

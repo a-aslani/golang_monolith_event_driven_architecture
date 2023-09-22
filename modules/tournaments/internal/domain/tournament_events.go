@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/tournaments/internal/domain/value_objects"
 	"time"
 )
 
@@ -9,11 +10,11 @@ const (
 )
 
 type TournamentCreated struct {
-	Name        string    `json:"name"`
-	Description string    `json:"description"`
-	Gamer1ID    string    `json:"gamer_1_id"`
-	Gamer2ID    string    `json:"gamer_2_id"`
-	CreatedAt   time.Time `json:"created_at"`
+	Name        value_objects.TournamentName
+	Description value_objects.TournamentDescription
+	Gamer1ID    value_objects.GamerID
+	Gamer2ID    value_objects.GamerID
+	CreatedAt   time.Time
 }
 
 func (TournamentCreated) Key() string { return TournamentCreatedEvent }

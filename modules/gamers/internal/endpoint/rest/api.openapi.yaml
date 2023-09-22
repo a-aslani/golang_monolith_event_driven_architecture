@@ -31,3 +31,15 @@ openapiOptions:
         tags:
           - Gamer
         summary: Get gamers
+    - method: gamerspb.GamersService.IncreaseGem
+      option:
+        operationId: increaseGem
+        tags:
+          - Gamer
+        summary: Increase gamer gem
+    - method: gamerspb.GamersService.DecreaseGem
+      option:
+        operationId: decreaseGem
+        tags:
+          - Gamer
+        summary: Decrease gamer gem

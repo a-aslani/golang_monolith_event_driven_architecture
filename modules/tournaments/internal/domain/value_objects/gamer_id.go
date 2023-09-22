@@ -10,7 +10,7 @@ var (
 )
 
 type GamerID struct {
-	value string
+	Value string
 }
 
 func NewGamerID(id string) (GamerID, error) {
@@ -20,10 +20,6 @@ func NewGamerID(id string) (GamerID, error) {
 	}
 
 	return GamerID{
-		value: id,
+		Value: id,
 	}, nil
-}
-
-func (receiver GamerID) Value() string {
-	return receiver.value
 }

@@ -98,6 +98,9 @@ func registrations(reg registry.Registry) (err error) {
 	if err = serde.Register(domain.GamerDisapproved{}); err != nil {
 		return
 	}
+	if err = serde.Register(domain.GamerUpdatedGem{}); err != nil {
+		return
+	}
 
 	// gamer snapshots
 	if err = serde.RegisterKey(domain.GamerV1{}.SnapshotName(), domain.GamerV1{}); err != nil {

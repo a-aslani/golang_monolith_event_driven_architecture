@@ -15,6 +15,8 @@ type App interface {
 type Commands interface {
 	CreateGamer(ctx context.Context, cmd commands.CreateGamer) error
 	DisapproveGamer(ctx context.Context, cmd commands.DisapproveGamer) error
+	IncreaseGem(ctx context.Context, cmd commands.IncreaseGem) error
+	DecreaseGem(ctx context.Context, cmd commands.DecreaseGem) error
 }
 
 type Queries interface {
@@ -30,6 +32,8 @@ type Application struct {
 type appCommands struct {
 	commands.CreateGamerHandler
 	commands.DisapproveGamerHandler
+	commands.IncreaseGemHandler
+	commands.DecreaseGemHandler
 }
 
 type appQueries struct {
@@ -44,6 +48,8 @@ func New(gamerEventStore domain.GamerEventStore, gamerRepo domain.GamerRepositor
 		appCommands: appCommands{
 			CreateGamerHandler:     commands.NewCreateGamerHandler(gamerEventStore, utils),
 			DisapproveGamerHandler: commands.NewDisapproveGamerHandler(gamerEventStore),
+			IncreaseGemHandler:     commands.NewIncreaseGemHandler(gamerEventStore),
+			DecreaseGemHandler:     commands.NewDecreaseGemHandler(gamerEventStore),
 		},
 		appQueries: appQueries{
 			GetGamerHandler:  queries.NewGetGamerHandler(gamerRepo),

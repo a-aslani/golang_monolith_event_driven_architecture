@@ -23,6 +23,8 @@ const (
 	GamersService_DisapproveGamer_FullMethodName = "/gamerspb.GamersService/DisapproveGamer"
 	GamersService_GetGamer_FullMethodName        = "/gamerspb.GamersService/GetGamer"
 	GamersService_GetGamers_FullMethodName       = "/gamerspb.GamersService/GetGamers"
+	GamersService_IncreaseGem_FullMethodName     = "/gamerspb.GamersService/IncreaseGem"
+	GamersService_DecreaseGem_FullMethodName     = "/gamerspb.GamersService/DecreaseGem"
 )
 
 // GamersServiceClient is the client API for GamersService service.
@@ -33,6 +35,8 @@ type GamersServiceClient interface {
 	DisapproveGamer(ctx context.Context, in *DisapproveGamerRequest, opts ...grpc.CallOption) (*DisapproveGamerResponse, error)
 	GetGamer(ctx context.Context, in *GetGamerRequest, opts ...grpc.CallOption) (*GetGamerResponse, error)
 	GetGamers(ctx context.Context, in *GetGamersRequest, opts ...grpc.CallOption) (*GetGamersResponse, error)
+	IncreaseGem(ctx context.Context, in *IncreaseGemRequest, opts ...grpc.CallOption) (*IncreaseGemResponse, error)
+	DecreaseGem(ctx context.Context, in *DecreaseGemRequest, opts ...grpc.CallOption) (*DecreaseGemResponse, error)
 }
 
 type gamersServiceClient struct {
@@ -79,6 +83,24 @@ func (c *gamersServiceClient) GetGamers(ctx context.Context, in *GetGamersReques
 	return out, nil
 }
 
+func (c *gamersServiceClient) IncreaseGem(ctx context.Context, in *IncreaseGemRequest, opts ...grpc.CallOption) (*IncreaseGemResponse, error) {
+	out := new(IncreaseGemResponse)
+	err := c.cc.Invoke(ctx, GamersService_IncreaseGem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *gamersServiceClient) DecreaseGem(ctx context.Context, in *DecreaseGemRequest, opts ...grpc.CallOption) (*DecreaseGemResponse, error) {
+	out := new(DecreaseGemResponse)
+	err := c.cc.Invoke(ctx, GamersService_DecreaseGem_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GamersServiceServer is the server API for GamersService service.
 // All implementations must embed UnimplementedGamersServiceServer
 // for forward compatibility
@@ -87,6 +109,8 @@ type GamersServiceServer interface {
 	DisapproveGamer(context.Context, *DisapproveGamerRequest) (*DisapproveGamerResponse, error)
 	GetGamer(context.Context, *GetGamerRequest) (*GetGamerResponse, error)
 	GetGamers(context.Context, *GetGamersRequest) (*GetGamersResponse, error)
+	IncreaseGem(context.Context, *IncreaseGemRequest) (*IncreaseGemResponse, error)
+	DecreaseGem(context.Context, *DecreaseGemRequest) (*DecreaseGemResponse, error)
 	mustEmbedUnimplementedGamersServiceServer()
 }
 
@@ -105,6 +129,12 @@ func (UnimplementedGamersServiceServer) GetGamer(context.Context, *GetGamerReque
 }
 func (UnimplementedGamersServiceServer) GetGamers(context.Context, *GetGamersRequest) (*GetGamersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGamers not implemented")
+}
+func (UnimplementedGamersServiceServer) IncreaseGem(context.Context, *IncreaseGemRequest) (*IncreaseGemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IncreaseGem not implemented")
+}
+func (UnimplementedGamersServiceServer) DecreaseGem(context.Context, *DecreaseGemRequest) (*DecreaseGemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DecreaseGem not implemented")
 }
 func (UnimplementedGamersServiceServer) mustEmbedUnimplementedGamersServiceServer() {}
 
@@ -191,6 +221,42 @@ func _GamersService_GetGamers_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GamersService_IncreaseGem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IncreaseGemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GamersServiceServer).IncreaseGem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GamersService_IncreaseGem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GamersServiceServer).IncreaseGem(ctx, req.(*IncreaseGemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _GamersService_DecreaseGem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DecreaseGemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GamersServiceServer).DecreaseGem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GamersService_DecreaseGem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GamersServiceServer).DecreaseGem(ctx, req.(*DecreaseGemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GamersService_ServiceDesc is the grpc.ServiceDesc for GamersService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -213,6 +279,14 @@ var GamersService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetGamers",
 			Handler:    _GamersService_GetGamers_Handler,
+		},
+		{
+			MethodName: "IncreaseGem",
+			Handler:    _GamersService_IncreaseGem_Handler,
+		},
+		{
+			MethodName: "DecreaseGem",
+			Handler:    _GamersService_DecreaseGem_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

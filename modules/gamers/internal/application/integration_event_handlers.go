@@ -37,9 +37,9 @@ func (h IntegrationEventHandlers[T]) onGamerCreated(ctx context.Context, event d
 			gamerspb.GamerCreatedEvent,
 			&gamerspb.GamerCreated{
 				Id:        event.ID(),
-				FirstName: payload.FirstName,
-				LastName:  payload.LastName,
-				Email:     payload.Email,
+				FirstName: payload.FullName.FistName,
+				LastName:  payload.FullName.LastName,
+				Email:     payload.Email.Value,
 			},
 		),
 	)

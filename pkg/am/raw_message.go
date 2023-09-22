@@ -1,8 +1,18 @@
 package am
 
 type (
+	RawMessageStream     = MessageStream[RawMessage, IncomingRawMessage]
+	RawMessageHandler    = MessageHandler[IncomingRawMessage]
+	RawMessagePublisher  = MessagePublisher[RawMessage]
+	RawMessageSubscriber = MessageSubscriber[IncomingRawMessage]
+
 	RawMessage interface {
 		Message
+		Data() []byte
+	}
+
+	IncomingRawMessage interface {
+		IncomingMessage
 		Data() []byte
 	}
 

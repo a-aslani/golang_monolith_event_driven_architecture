@@ -11,3 +11,9 @@ http:
       get: /api/gamers/{id}
     - selector: gamerspb.GamersService.GetGamers
       get: /api/gamers
+    - selector: gamerspb.GamersService.IncreaseGem
+      put: /api/gamers/{id}/gem/increase
+      body: "*"
+    - selector: gamerspb.GamersService.DecreaseGem
+      put: /api/gamers/{id}/gem/decrease
+      body: "*"
