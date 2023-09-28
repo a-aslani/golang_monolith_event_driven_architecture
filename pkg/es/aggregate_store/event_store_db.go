@@ -68,7 +68,7 @@ func (e EventStoreDB) NewEventFromRecorded(event *esdb.RecordedEvent) (aggregate
 		data:        event.Data,
 		timestamp:   event.CreatedDate,
 		aggregateID: event.StreamID,
-		version:     int64(event.EventNumber),
+		version:     int64(metadata.Get(ddd.AggregateVersionKey).(float64)),
 		metadata:    metadata,
 		payload:     payload,
 		name:        event.EventType,

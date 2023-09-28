@@ -1,3 +1,10 @@
 syntax = "proto3";
 
 package storespb;
+
+message Store {
+  string id = 1;
+  string name = 2;
+  int32 amount = 3;
+  float price = 4;
+}

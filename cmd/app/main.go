@@ -7,6 +7,7 @@ import (
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/config"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/gamers"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/notifications"
+	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/stores"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/modules/tournaments"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/logger"
 	"github.com/a-aslani/golang_monolith_event_driven_architecture/pkg/monolith"
@@ -28,6 +29,7 @@ var modules = []monolith.Module{
 	&gamers.Module{},
 	&notifications.Module{},
 	&tournaments.Module{},
+	&stores.Module{},
 }
 
 func main() {

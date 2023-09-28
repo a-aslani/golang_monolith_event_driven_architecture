@@ -5,9 +5,52 @@ package storespb;
 import "storespb/messages.proto";
 
 service StoresService {
-  rpc Test(TestRequest) returns (TestResponse){};
+  rpc CreateStore(CreateStoreRequest) returns (CreateStoreResponse){};
+  rpc EditStore(EditStoreRequest) returns (EditStoreResponse){};
+  rpc RemoveStore(RemoveStoreRequest) returns (RemoveStoreResponse){};
+  rpc GetStore(GetStoreRequest) returns (GetStoreResponse){};
+  rpc GetStores(GetStoresRequest) returns (GetStoresResponse){};
 }
 
-message TestRequest {}
+message GetStoreRequest {
+  string id = 1;
+}
 
-message TestResponse {}
+message GetStoreResponse {
+  Store store = 1;
+}
+
+message GetStoresRequest {}
+
+message GetStoresResponse {
+  repeated Store stores = 1;
+}
+
+message RemoveStoreRequest {
+  string id = 1;
+}
+
+message RemoveStoreResponse {
+
+}
+
+message EditStoreRequest {
+  string id = 1;
+  string name = 2;
+  int32 amount = 3;
+  float price = 4;
+}
+
+message EditStoreResponse {
+  string id = 1;
+}
+
+message CreateStoreRequest {
+  string name = 1;
+  int32 amount = 2;
+  float price = 3;
+}
+
+message CreateStoreResponse {
+  string id = 1;
+}

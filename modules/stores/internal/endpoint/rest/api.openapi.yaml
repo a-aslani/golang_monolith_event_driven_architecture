@@ -7,9 +7,33 @@ openapiOptions:
           version: "1.0.0"
         basePath: /
   method:
-    - method: storespb.StoresService.Test
+    - method: storespb.StoresService.CreateStore
       option:
-        operationId: TestStore
+        operationId: CreateStore
         tags:
           - Store
-        summary: Test store
+        summary: Create a new store
+    - method: storespb.StoresService.EditStore
+      option:
+        operationId: EditStore
+        tags:
+          - Store
+        summary: Edit store
+    - method: storespb.StoresService.RemoveStore
+      option:
+        operationId: RemoveStore
+        tags:
+          - Store
+        summary: Remove store
+    - method: storespb.StoresService.GetStore
+      option:
+        operationId: GetStore
+        tags:
+          - Store
+        summary: Get current store
+    - method: storespb.StoresService.GetStores
+      option:
+        operationId: GetStores
+        tags:
+          - Store
+        summary: Get all stores

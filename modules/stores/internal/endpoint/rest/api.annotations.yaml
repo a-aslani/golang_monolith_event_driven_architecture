@@ -2,5 +2,15 @@ type: google.api.Service
 config_version: 3
 http:
   rules:
-    - selector: storespb.StoresService.Test
+    - selector: storespb.StoresService.GetStore
+      get: /api/stores/{id}
+    - selector: storespb.StoresService.GetStores
       get: /api/stores
+    - selector: storespb.StoresService.CreateStore
+      post: /api/stores
+      body: "*"
+    - selector: storespb.StoresService.EditStore
+      put: /api/stores/{id}
+      body: "*"
+    - selector: storespb.StoresService.RemoveStore
+      delete: /api/stores

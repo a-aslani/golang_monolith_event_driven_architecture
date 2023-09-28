@@ -19,13 +19,13 @@
   "paths": {
     "/api/stores": {
       "get": {
-        "summary": "Test store",
-        "operationId": "TestStore",
+        "summary": "Get all stores",
+        "operationId": "GetStores",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/storespbTestResponse"
+              "$ref": "#/definitions/storespbGetStoresResponse"
             }
           },
           "default": {
@@ -35,6 +35,147 @@
             }
           }
         },
+        "tags": [
+          "Store"
+        ]
+      },
+      "delete": {
+        "summary": "Remove store",
+        "operationId": "RemoveStore",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/storespbRemoveStoreResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Store"
+        ]
+      },
+      "post": {
+        "summary": "Create a new store",
+        "operationId": "CreateStore",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/storespbCreateStoreResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/storespbCreateStoreRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Store"
+        ]
+      }
+    },
+    "/api/stores/{id}": {
+      "get": {
+        "summary": "Get current store",
+        "operationId": "GetStore",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/storespbGetStoreResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Store"
+        ]
+      },
+      "put": {
+        "summary": "Edit store",
+        "operationId": "EditStore",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/storespbEditStoreResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "price": {
+                  "type": "number",
+                  "format": "float"
+                }
+              }
+            }
+          }
+        ],
         "tags": [
           "Store"
         ]
@@ -70,8 +211,79 @@
         }
       }
     },
-    "storespbTestResponse": {
+    "storespbCreateStoreRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "price": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "storespbCreateStoreResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "storespbEditStoreResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "storespbGetStoreResponse": {
+      "type": "object",
+      "properties": {
+        "store": {
+          "$ref": "#/definitions/storespbStore"
+        }
+      }
+    },
+    "storespbGetStoresResponse": {
+      "type": "object",
+      "properties": {
+        "stores": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/storespbStore"
+          }
+        }
+      }
+    },
+    "storespbRemoveStoreResponse": {
       "type": "object"
+    },
+    "storespbStore": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "price": {
+          "type": "number",
+          "format": "float"
+        }
+      }
     }
   }
 }
